@@ -18,7 +18,8 @@ import java.util.Locale;
 
 import static org.testng.Assert.*;
 
-public class EventsPage {
+public class EventsPage extends AbsBasePage {
+
 
     private WebDriver driver;
     private WebDriverWait wait;
@@ -36,16 +37,17 @@ public class EventsPage {
             DateTimeFormatter.ofPattern("d MMMM yyyy", new Locale("ru"));
 
     public EventsPage(WebDriver driver) {
+        super(driver);
         this.driver = driver;
         Duration duration = Duration.ofSeconds(5);
         this.wait = new WebDriverWait(driver, duration);
     }
 
 
-    public void openMainPage(String url) {
-        logger.info("Открытие главной страницы: {}", url);
-        driver.get(url);
-        assertEquals(driver.getCurrentUrl(), url, "Главная страница не открылась");
+    // В EventsPage
+    public void openMainPage() {
+        logger.info("Открытие главной страницы");
+        open("/");  // Метод open() из AbsBasePage уже содержит проверку URL
     }
 
     public void clickEducationButton() {
@@ -119,7 +121,7 @@ public class EventsPage {
                         "Дата мероприятия устарела: " + parsedDate);
             } catch (Exception e) {
                 logger.error("Ошибка при обработке даты мероприятия: {}", e.getMessage());
-                assertTrue(false, "Ошибка валидации даты мероприятия");
+                fail("Ошибка валидации даты мероприятия");
             }
         }
         logger.info("Проверка дат мероприятий завершена успешно");
